@@ -1,0 +1,193 @@
+/* ---------------------------------------------------------
+   GLOBAL RESET + BASE
+--------------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background: #000;
+    color: #EAEAEA;
+    overflow-x: hidden;
+    height: 100vh;
+}
+
+/* ---------------------------------------------------------
+   ANIMATED NOIR BACKGROUND
+--------------------------------------------------------- */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 20%, rgba(255, 200, 100, 0.05), transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(0, 200, 255, 0.05), transparent 60%);
+    background-color: #050505;
+    filter: blur(40px);
+    animation: ambientGlow 12s infinite alternate ease-in-out;
+    z-index: -1;
+}
+
+@keyframes ambientGlow {
+    0% { opacity: 0.4; }
+    100% { opacity: 0.8; }
+}
+
+/* ---------------------------------------------------------
+   HEADER
+--------------------------------------------------------- */
+.header {
+    text-align: center;
+    padding: 40px 0 20px;
+}
+
+.title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 4px;
+    color: #C89B3C; /* Tech-Noir gold */
+    text-shadow: 0 0 12px rgba(200, 155, 60, 0.6);
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #7A5CFF; /* Holographic violet */
+    letter-spacing: 2px;
+    margin-top: 6px;
+}
+
+/* ---------------------------------------------------------
+   MAIN LAYOUT
+--------------------------------------------------------- */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 30px;
+    padding: 20px 40px;
+}
+
+/* ---------------------------------------------------------
+   GLASS PANELS (HOLOGRAPHIC)
+--------------------------------------------------------- */
+.glass {
+    background: rgba(15, 15, 15, 0.35);
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 20px;
+    backdrop-filter: blur(14px);
+    box-shadow:
+        0 0 20px rgba(0, 255, 255, 0.08),
+        inset 0 0 20px rgba(0, 255, 255, 0.05);
+    transition: 0.3s ease;
+}
+
+.glass:hover {
+    box-shadow:
+        0 0 25px rgba(0, 255, 255, 0.25),
+        inset 0 0 25px rgba(0, 255, 255, 0.15);
+    transform: translateY(-3px);
+}
+
+/* ---------------------------------------------------------
+   PANEL HEADERS
+--------------------------------------------------------- */
+.panel h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: #4DFFEA; /* Mint hologram */
+    text-shadow: 0 0 8px rgba(77, 255, 234, 0.6);
+}
+
+/* ---------------------------------------------------------
+   INPUT PANEL
+--------------------------------------------------------- */
+textarea {
+    width: 100%;
+    height: 180px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px;
+    color: #EAEAEA;
+    font-size: 1rem;
+    resize: none;
+    outline: none;
+    backdrop-filter: blur(6px);
+    transition: 0.3s ease;
+}
+
+textarea:focus {
+    border-color: #00E5FF;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+}
+
+/* ---------------------------------------------------------
+   HOLOGRAPHIC BUTTON
+--------------------------------------------------------- */
+.holo-btn {
+    margin-top: 14px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #00E5FF, #7A5CFF);
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+}
+
+.holo-btn:hover {
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.7);
+    transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------
+   FUTURE-STATE HOLOGRAM OUTPUT
+--------------------------------------------------------- */
+.holo-output {
+    min-height: 200px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    border-left: 2px solid #00E5FF;
+    border-radius: 10px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #B8F1FF;
+    text-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+}
+
+/* ---------------------------------------------------------
+   INSIGHTS LIST
+--------------------------------------------------------- */
+.insights-panel ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.insights-panel li {
+    margin-bottom: 10px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 2px solid #7A5CFF;
+    border-radius: 6px;
+    color: #EAEAEA;
+    text-shadow: 0 0 4px rgba(122, 92, 255, 0.4);
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE
+--------------------------------------------------------- */
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
