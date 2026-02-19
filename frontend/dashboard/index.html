@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mirror of Tomorrow</title>
+
+    <!-- Futuristic Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <!-- Animated Noir Background -->
+    <div class="background"></div>
+
+    <!-- Holographic Header -->
+    <header class="header">
+        <h1 class="title">MIRROR OF TOMORROW</h1>
+        <p class="subtitle">Future-State Intelligence Chamber</p>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="container">
+
+        <!-- Input Panel -->
+        <section class="panel input-panel glass">
+            <h2>Input Stream</h2>
+            <textarea id="userInput" placeholder="Type your thoughts, intentions, or state of mind..."></textarea>
+            <button id="analyzeBtn" class="holo-btn">Analyze Future State</button>
+        </section>
+
+        <!-- Future-State Hologram -->
+        <section class="panel hologram-panel glass">
+            <h2>Future-State Projection</h2>
+            <div id="futureSummary" class="holo-output"></div>
+        </section>
+
+        <!-- Insights Panel -->
+        <section class="panel insights-panel glass">
+            <h2>Insights & Signals</h2>
+            <ul id="insightsList"></ul>
+        </section>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
