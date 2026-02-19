@@ -9,7 +9,11 @@
  *   - glow based on stability/confidence
  *   - animate transitions when new output arrives
  *
- * For now, this is a scaffold with placeholder animations.
+ * This version is aligned with:
+ *   - index.html
+ *   - styles.css
+ *   - main_ui.js
+ *   - ui_state.js
  */
 
 export default class ChamberCore {
