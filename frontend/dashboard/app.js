@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------
    Mirror of Tomorrow - Frontend Intelligence Layer
-   This script powers the holographic dashboard UI.
+   Connects the dashboard UI to the backend API.
 --------------------------------------------------------- */
 
 // DOM elements
@@ -25,25 +25,32 @@ function clearInsights() {
 }
 
 /* ---------------------------------------------------------
-   TEMPORARY SIMULATION OF BACKEND OUTPUT
-   (This will be replaced by real orchestrator integration)
+   CALL BACKEND API
 --------------------------------------------------------- */
-function simulateBackend(text) {
-    return {
-        summary: `Based on your input, your emotional trajectory shows signs of growth and stabilization. 
-                  Your current mindset indicates forward momentum and constructive self-alignment.`,
-        trajectory: "up",
-        emotion: "focused",
-        risk: "low",
-        reward: "medium",
-        stability: "stable",
-        insights: [
-            "Your emotional signals show increased clarity.",
-            "Your behavioral patterns indicate consistent improvement.",
-            "Your stress markers remain manageable.",
-            "Your future-state projection trends positive."
-        ]
-    };
+async function callBackend(text) {
+    try {
+        const response = await fetch("http://localhost:8000/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ text })
+        });
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        return {
+            summary: "Backend unreachable. Check server connection.",
+            trajectory: "flat",
+            emotion: "neutral",
+            risk: "low",
+            reward: "low",
+            stability: "stable",
+            insights: ["Unable to connect to backend API."]
+        };
+    }
 }
 
 /* ---------------------------------------------------------
@@ -74,7 +81,7 @@ function renderFutureState(data) {
 /* ---------------------------------------------------------
    MAIN BUTTON HANDLER
 --------------------------------------------------------- */
-analyzeBtn.addEventListener("click", () => {
+analyzeBtn.addEventListener("click", async () => {
     const text = inputBox.value.trim();
 
     if (!text) {
@@ -82,8 +89,8 @@ analyzeBtn.addEventListener("click", () => {
         return;
     }
 
-    // Simulate backend for now
-    const result = simulateBackend(text);
+    // Call backend API
+    const result = await callBackend(text);
 
     // Render hologram output
     renderFutureState(result);
