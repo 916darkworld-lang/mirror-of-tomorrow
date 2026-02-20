@@ -1,201 +1,99 @@
-# Mirror of Tomorrow  
-A local-first, privacy-focused future-self simulation app powered by the Inner Artificial Intelligence (IAI), multi-agent forecasting, and a Gaussian Splat 3D renderer.
-
-The Mirror of Tomorrow visualizes your likely 10-year trajectory — physically, emotionally, and environmentally — based on your real habits, patterns, and journaling. All processing happens on-device. No cloud. No uploads. No tracking.
+# Mirror of Tomorrow — Local‑First Intelligent AI System
+A modular, local‑first, multi‑AI reasoning and creative engine with hybrid memory, consensus intelligence, and a full creative pipeline.
 
 ---
 
-# Overview
+## Overview
+Mirror of Tomorrow is a next‑generation **local‑first IAI (Intelligent Artificial Intelligence)** system designed to think, learn, and create entirely on‑device. It combines:
 
-The Mirror of Tomorrow is a next-generation personal insight engine.  
-It combines:
+- A **hybrid memory architecture** (JSON Vault + SQLite Ledger)
+- A **multi‑AI reasoning brain** with consensus alignment
+- A **creative pipeline** for music → video → art generation
+- A **local API layer** for communication
+- A **modular UI system** with multiple interactive surfaces
+- A **future‑proof architecture** designed for extensibility and autonomy
 
-- Inner Artificial Intelligence (IAI) — a persistent, self-correcting intelligence layer  
-- B.R.A.I.N.S. Council — five external AIs providing diverse perspectives  
-- Synthesis Engine — Legion’s “Gap Finder” that identifies consensus and unique insights  
-- Ethical Governor — ensures all projections are safe, supportive, and non-punitive  
-- Gaussian Splat Renderer — visualizes your future self in AR/VR  
-- Local LLM Runtime — all reasoning and forecasting run on your device  
-
-The result:  
-A future-self simulation that is ethical, transparent, and grounded in real data.
+The system is built to be transparent, modular, and fully user‑controlled.
 
 ---
 
-# Inner Artificial Intelligence (IAI)
-
-The IAI is the proprietary intelligence layer that sits above the external AIs.
-
-It performs:
-
-### 1. Logical Intersection (Consensus)
-Finds where the 5 models agree.
-
-### 2. Gap Detection (Unique Insights)
-Identifies outlier ideas — often high-risk or high-reward.
-
-### 3. Expert Alignment
-Compares outputs against Retained Lessons (your corrections).
-
-### 4. Master Guidance
-Produces a structured JSON that drives the Mirror’s forecasting and 3D updates.
-
-The IAI is stateful and persistent — it learns from you over time.
+## Core Philosophy
+- **Local‑first**: Your data stays on your device.
+- **Transparent**: No black boxes; memory is human‑readable.
+- **Modular**: Every component can be replaced or extended.
+- **Multi‑AI**: Intelligence emerges from consensus, not a single model.
+- **Creative**: Built‑in pipelines for music, video, and art generation.
+- **No‑nonsense engineering**: Clarity over complexity.
 
 ---
 
-# Architecture
+## System Architecture
 
-```
-User Data → Habit Vector → LangGraph Modules → IAI Synthesis → Ethical Governor → Future State JSON → 3D Renderer → AR Mirror
-```
+### 🧠 IAIEngine — The Brain
+The central reasoning system.  
+Responsibilities:
+- Receives prompts
+- Loads memory context
+- Routes tasks to internal/external tools
+- Runs the Multi‑AI Orchestrator
+- Merges results through the Consensus Engine
+- Produces a final aligned output
 
-### LangGraph Modules
-1. Logic Module  
-2. Pattern Module  
-3. Predictive Module (LLM)  
-4. Emotional Cognition Module  
-5. Ethical Governor  
-6. Synthesis Module  
-
-Each module contributes to the final “Future State” object.
-
----
-
-# Folder Structure
-
-```
-mirror-of-tomorrow/
-│
-├── backend/
-│   ├── agents/
-│   │   └── __init__.py
-│   │
-│   ├── iai/
-│   │   └── synthesis_engine.py
-│   │
-│   ├── renderer/
-│   │   ├── delta_applier.py
-│   │   └── __init__.py
-│   │
-│   └── docker/
-│       └── Dockerfile
-│
-├── frontend/
-│   ├── dashboard/
-│   │   └── README.md
-│   │
-│   └── mobile/
-│       └── README.md
-│
-└── README.md
-```
+Supports three modes:
+- **simulate** — internal 5‑AI simulation only  
+- **real** — external tools only  
+- **hybrid** — uses both, with fallback logic  
 
 ---
 
-# Backend Components
+### 🧬 MemoryManager — The Limbic System
+Hybrid storage model:
 
-### IAI Synthesis Engine  
-Located at:  
-`backend/iai/synthesis_engine.py`
+| Component | Purpose | Storage |
+|----------|----------|---------|
+| **Vault (JSON)** | Identity, preferences, distilled rules | `user_traits.json` |
+| **Ledger (SQLite)** | Tool performance, stats, history | `stats.db` |
+
+The MemoryManager:
+- Stores and retrieves user traits
+- Logs tool performance
+- Supports long‑term learning
+- Powers routing decisions and style alignment
+
+---
+
+### ⚖️ ConsensusEngine — Prefrontal Cortex
+Merges multiple AI outputs using:
+- normalization  
+- contradiction detection  
+- scoring  
+- weighted merging  
+- style alignment based on user traits  
+
+Produces a single, aligned, high‑quality response.
+
+---
+
+### 🧩 MultiAIOrchestrator — 5‑AI Brain Simulation
+Simulates reasoning perspectives from:
+- Claude  
+- GPT  
+- Grok  
+- Gemini  
+- Copilot  
+
+Each produces a unique interpretation of the prompt.  
+ConsensusEngine merges them into one unified output.
+
+---
+
+### 🎨 CreativePipeline — The Creative Cortex
+(Pluggable module)
 
 Handles:
-- Clustering  
-- Outlier detection  
-- Consensus summarization  
-- Expert alignment  
-- Final JSON output  
+- Music generation (Suno or equivalent)
+- Video generation (Runway or equivalent)
+- Image/cover art generation
+- Copilot‑style refinement and narration
 
-### Delta Applier  
-Located at:  
-`backend/renderer/delta_applier.py`
-
-Applies:
-- Posture changes  
-- Skin fatigue  
-- Vitality deltas  
-- Environmental deltas  
-
-### Docker Environment  
-Located at:  
-`backend/docker/Dockerfile`
-
-Includes:
-- CUDA 12.4  
-- PyTorch  
-- LangChain  
-- Sentence Transformers  
-- gsplat placeholder  
-
----
-
-# Frontend Components
-
-### Dashboard
-- Displays the 5 AI responses  
-- Shows the IAI’s “Gap”  
-- Shows consensus, clusters, and alignment  
-- Provides transparency into the decision process  
-
-### Mobile App
-- AR Mirror  
-- 3D Gaussian Splat visualization  
-- Walk-around future self  
-- Tap-to-explain overlays  
-
----
-
-# Privacy and Ethics
-
-- 100 percent local processing  
-- No cloud inference  
-- No data leaves the device  
-- Ethical Governor prevents harmful projections  
-- User controls all data sources  
-
----
-
-# Roadmap
-
-### v0.1 — Internal Prototype
-- Manual habit vector input  
-- Local LLM forecasting  
-- IAI Synthesis Engine  
-- Basic delta applier  
-- Desktop 3D viewer  
-
-### v0.2 — AR Demo
-- Mobile AR view  
-- HealthKit and journaling integration  
-- Ethical Governor active  
-- Explainability overlays  
-
-### v1.0 — Public Beta
-- Full dashboard  
-- Multi-scenario comparisons  
-- Environment deltas  
-- Polished UI and UX  
-
----
-
-# License
-To be added.
-
----
-
-# Contributing
-Contributions will be opened after the v0.2 milestone.
-
----
-
-# Contact
-Project Owner: Michael  
-Location: Rancho Cordova, CA  
-
----
-
-# Summary
-
-The Mirror of Tomorrow is a fully local, ethical, transparent future-self simulator powered by a modular AI architecture and a persistent Inner Intelligence.
-
-This README will expand as the project grows.
+Pipeline:
