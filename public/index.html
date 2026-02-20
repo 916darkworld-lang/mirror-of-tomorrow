@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAI Multi-AI Brain</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-shell">
+        <header>
+            <h1>IAI BRAIN :: MULTI-AI CONSENSUS</h1>
+            <div id="memory-indicator">Memory: <span id="trait-count">0</span> traits loaded</div>
+        </header>
+
+        <main>
+            <section id="input-chamber">
+                <textarea id="prompt-input" placeholder="Give the Brain a directive..."></textarea>
+                <button id="think-btn">INITIATE THINKING</button>
+            </section>
+
+            <section id="brain-grid">
+                <div class="ai-node" id="node-1"><h3>GPT-4o</h3><div class="status">Idle</div></div>
+                <div class="ai-node" id="node-2"><h3>Claude 3.5</h3><div class="status">Idle</div></div>
+                <div class="ai-node" id="node-3"><h3>Gemini Pro</h3><div class="status">Idle</div></div>
+                <div class="ai-node" id="node-4"><h3>Llama 3</h3><div class="status">Idle</div></div>
+                <div class="ai-node" id="node-5"><h3>Mistral Large</h3><div class="status">Idle</div></div>
+            </section>
+
+            <section id="consensus-output">
+                <h2>FINAL DECISION (CONSENSUS)</h2>
+                <div id="result-box">Waiting for neural activity...</div>
+            </section>
+        </main>
+    </div>
+    <script src="brain-ui.js"></script>
+</body>
+</html>
