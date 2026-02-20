@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Multi‑AI Control Window</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: sans-serif;
+      background: #111;
+      color: #eee;
+    }
+
+    #prompt-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    #prompt-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      background: #222;
+      border: 1px solid #444;
+      color: #eee;
+    }
+
+    #send-btn {
+      padding: 10px 20px;
+      background: #333;
+      border: 1px solid #555;
+      color: #eee;
+      cursor: pointer;
+    }
+
+    #window-controls {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .control-btn {
+      padding: 8px 14px;
+      background: #333;
+      border: 1px solid #555;
+      color: #eee;
+      cursor: pointer;
+    }
+
+    #responses {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      min-height: 150px;
+      overflow-y: auto;
+    }
+
+    #consensus-box {
+      padding: 10px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      min-height: 120px;
+      margin-bottom: 20px;
+    }
+
+    #final-answer {
+      padding: 10px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      min-height: 150px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="prompt-section">
+    <input id="prompt-input" type="text" placeholder="Enter your prompt">
+    <button id="send-btn">Send</button>
+  </div>
+
+  <div id="window-controls">
+    <button class="control-btn" id="minimize-all">Minimize All</button>
+    <button class="control-btn" id="maximize-all">Maximize All</button>
+    <button class="control-btn" id="restore-all">Restore All</button>
+    <button class="control-btn" id="hide-all">Hide All</button>
+    <button class="control-btn" id="show-all">Show All</button>
+  </div>
+
+  <h3>AI Responses</h3>
+  <div id="responses"></div>
+
+  <h3>Consensus Remix</h3>
+  <div id="consensus-box"></div>
+
+  <h3>Final Answer</h3>
+  <div id="final-answer"></div>
+
+  <script src="control-window.js"></script>
+</body>
+</html>
