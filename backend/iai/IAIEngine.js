@@ -1,189 +1,216 @@
-/**
- * IAIEngine - The Prefrontal Cortex of the System
- * -----------------------------------------------
- * This is the decision-making brain that sits on top of:
- *
- *   - MemoryManager (brain tissue)
- *   - Multi-AI Orchestrator (external minds)
- *   - Creative Pipelines (music/video/art)
- *   - Chamber UI (reflection surface)
- *
- * Responsibilities:
- *   - Start and end sessions
- *   - Normalize inputs
- *   - Select tools/models
- *   - Apply strategic rules
- *   - Update memory after each run
- *   - Produce a final, stable decision/output
- *
- * This engine does NOT:
- *   - Render UI
- *   - Talk directly to external AI windows
- *   - Store raw transcripts or artifacts
- *
- * It ONLY:
- *   - Thinks
- *   - Decides
- *   - Learns
- */
+// backend/IAIEngine.js
+const MultiAIOrchestrator = require('./orchestrator/multiaiorchestrator');
+const MemoryManager = require('./MemoryManager');
 
-import { MemoryManager } from "../memory/MemoryManager.js";
+class IAIEngine {
+    constructor(options = {}) {
+        const { userDataPath = './data', mode = 'hybrid' } = options;
 
-export default class IAIEngine {
-    constructor({ localStorageAdapter, cloudStorageAdapter, secureLocalStorageAdapter }) {
-        this.memory = new MemoryManager({
-            localStorageAdapter,
-            cloudStorageAdapter,
-            secureLocalStorageAdapter
-        });
-    }
-
-    /**
-     * Start a new reasoning session.
-     * Returns a sessionId that the orchestrator or pipeline will use.
-     */
-    startSession(initialData = {}) {
-        const sessionId = `session_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-        this.memory.sessionContext.startSession(sessionId, initialData);
-        return sessionId;
-    }
-
-    /**
-     * Update the session with new information.
-     * This is where the orchestrator feeds:
-     *   - tool outputs
-     *   - alignment scores
-     *   - metadata
-     *   - partial results
-     */
-    updateSession(sessionId, partialData) {
-        return this.memory.sessionContext.updateSession(sessionId, partialData);
-    }
-
-    /**
-     * Core decision pipeline.
-     * This is where the brain:
-     *   - reads memory
-     *   - applies rules
-     *   - selects tools
-     *   - produces a plan
-     */
-    async decide(sessionId) {
-        const session = this.memory.sessionContext.getSession(sessionId);
-        if (!session) {
-            throw new Error(`Session ${sessionId} not found`);
-        }
-
-        const {
-            user_id,
-            task_type,
-            input_prompt,
-            metadata = {}
-        } = session;
-
-        // 1) Load user profile
-        const profile = user_id
-            ? await this.memory.userProfile.getProfile(user_id)
-            : {};
-
-        // 2) Load strategic rules
-        const rules = await this.memory.strategicMemory.getAllRules();
-
-        // 3) Apply rules to generate a plan
-        const plan = this._generatePlan({
-            task_type,
-            input_prompt,
-            metadata,
-            profile,
-            rules
+        this.mode = mode; // 'simulate' | 'real' | 'hybrid'
+        this.memory = new MemoryManager(userDataPath);
+        this.orchestrator = new MultiAIOrchestrator({
+            memory: this.memory
         });
 
-        // 4) Return the plan to the orchestrator or pipeline
-        return plan;
+        // Placeholder for real tool clients (Suno, Runway, etc.)
+        this.tools = {
+            // suno: new SunoClient({ apiKey: process.env.SUNO_KEY }),
+            // runway: new RunwayClient({ apiKey: process.env.RUNWAY_KEY }),
+        };
     }
 
     /**
-     * Internal rule application logic.
-     * This is where the IAIEngine becomes intelligent.
+     * Main thinking entrypoint.
+     * @param {Object} payload
+     * @param {string} payload.prompt
+     * @param {string} [payload.mode] - e.g. 'chamber', 'multi_ai', 'creative'
+     * @param {Object} [payload.meta] - extra flags/context
      */
-    _generatePlan({ task_type, input_prompt, metadata, profile, rules }) {
-        const plan = {
-            task_type,
-            steps: [],
-            recommended_tools: {},
-            strategy_notes: []
+    async think({ prompt, mode = 'chamber', meta = {} }) {
+        const traits = this.memory.getTraits();
+
+        // 1. Build context
+        const context = {
+            traits,
+            mode,
+            meta,
+            timestamp: new Date().toISOString()
         };
 
-        // Apply strategic rules
-        for (const rule of rules) {
-            if (this._ruleApplies(rule, { task_type, metadata })) {
-                plan.strategy_notes.push(rule.description);
+        // 2. Decide routing strategy
+        const routingDecision = this.decideRouting({ prompt, mode, traits });
 
-                if (rule.recommends.preferred_tool) {
-                    plan.recommended_tools[rule.applies_when.role] =
-                        rule.recommends.preferred_tool;
-                }
+        // 3. Run through orchestrator (internal 5‑AI brain)
+        const orchestratorResult = await this.orchestrator.run({
+            prompt,
+            context,
+            routingDecision
+        });
 
-                // Example: visual tone, pacing, etc.
-                Object.assign(plan, rule.recommends);
+        // 4. Optionally call real tools (if in 'real' or 'hybrid' and routing says so)
+        let externalResults = null;
+        if (this.shouldUseExternalTools(routingDecision)) {
+            externalResults = await this.runExternalTools({
+                prompt,
+                mode,
+                traits,
+                routingDecision
+            });
+        }
+
+        // 5. Merge internal + external into final answer
+        const merged = this.mergeResults({
+            prompt,
+            mode,
+            traits,
+            orchestratorResult,
+            externalResults
+        });
+
+        // 6. Log performance / learning hooks
+        this.learnFromOutcome({
+            prompt,
+            mode,
+            traits,
+            routingDecision,
+            orchestratorResult,
+            externalResults,
+            merged
+        });
+
+        return {
+            output: merged.output,
+            reasoning: {
+                routingDecision,
+                orchestratorResult,
+                externalResultsSummary: externalResults
+                    ? this.summarizeExternal(externalResults)
+                    : null,
+                traitsUsed: traits
             }
+        };
+    }
+
+    decideRouting({ prompt, mode, traits }) {
+        // Very simple starter logic; expand later.
+        const lower = prompt.toLowerCase();
+
+        const isMusic =
+            lower.includes('song') ||
+            lower.includes('music') ||
+            lower.includes('melody');
+
+        const isVideo =
+            lower.includes('video') ||
+            lower.includes('clip') ||
+            lower.includes('scene');
+
+        const isArt =
+            lower.includes('image') ||
+            lower.includes('art') ||
+            lower.includes('cover');
+
+        return {
+            useInternalConsensus: true,
+            useExternalMusic: isMusic,
+            useExternalVideo: isVideo,
+            useExternalArt: isArt,
+            mode
+        };
+    }
+
+    shouldUseExternalTools(routingDecision) {
+        if (this.mode === 'simulate') return false;
+        if (this.mode === 'real') return true;
+        // hybrid
+        return (
+            routingDecision.useExternalMusic ||
+            routingDecision.useExternalVideo ||
+            routingDecision.useExternalArt
+        );
+    }
+
+    async runExternalTools({ prompt, mode, traits, routingDecision }) {
+        const results = {};
+
+        // NOTE: these are placeholders; wire real clients later.
+        if (routingDecision.useExternalMusic) {
+            results.music = {
+                tool: 'suno',
+                status: 'simulated',
+                note: 'Hook real Suno client here.'
+            };
+            this.memory.logToolPerformance('suno', 'music', 8);
         }
 
-        // Apply user profile traits
-        if (profile.visual_bias) {
-            plan.strategy_notes.push(`User prefers visual bias: ${profile.visual_bias}`);
+        if (routingDecision.useExternalVideo) {
+            results.video = {
+                tool: 'runway',
+                status: 'simulated',
+                note: 'Hook real Runway client here.'
+            };
+            this.memory.logToolPerformance('runway', 'video', 8);
         }
 
-        if (profile.preferred_video_tool) {
-            plan.recommended_tools.video = profile.preferred_video_tool;
+        if (routingDecision.useExternalArt) {
+            results.art = {
+                tool: 'image_model',
+                status: 'simulated',
+                note: 'Hook real art model here.'
+            };
+            this.memory.logToolPerformance('image_model', 'art', 8);
         }
 
-        // Default fallback if no rules apply
-        if (Object.keys(plan.recommended_tools).length === 0) {
-            plan.recommended_tools = {
-                music: "Suno",
-                video: "Runway",
-                art: "Midjourney"
+        return results;
+    }
+
+    mergeResults({ prompt, mode, traits, orchestratorResult, externalResults }) {
+        // For now, just surface orchestrator output and annotate with external info.
+        const externalSummary = externalResults
+            ? Object.keys(externalResults).map(k => `${k}: ${externalResults[k].status}`).join(', ')
+            : 'none';
+
+        const baseOutput =
+            orchestratorResult?.mergedOutput ||
+            orchestratorResult?.output ||
+            'No orchestrator output available.';
+
+        const decorated = `${baseOutput}\n\n[External tools used: ${externalSummary}]`;
+
+        return {
+            output: decorated,
+            meta: {
+                mode,
+                traitsSnapshot: traits
+            }
+        };
+    }
+
+    learnFromOutcome({
+        prompt,
+        mode,
+        traits,
+        routingDecision,
+        orchestratorResult,
+        externalResults,
+        merged
+    }) {
+        // Hook for future: update identity, rules, stats based on feedback.
+        // Example: if meta.feedbackScore exists, log it.
+        // This is intentionally minimal for now.
+        return;
+    }
+
+    summarizeExternal(externalResults) {
+        const summary = {};
+        for (const [k, v] of Object.entries(externalResults)) {
+            summary[k] = {
+                tool: v.tool,
+                status: v.status
             };
         }
-
-        return plan;
-    }
-
-    /**
-     * Check if a strategic rule applies to the current session.
-     */
-    _ruleApplies(rule, { task_type, metadata }) {
-        const cond = rule.applies_when;
-
-        if (cond.task_type && cond.task_type !== task_type) return false;
-
-        if (cond.bpm_min && metadata.bpm && metadata.bpm < cond.bpm_min) return false;
-
-        if (cond.mood && metadata.mood && metadata.mood !== cond.mood) return false;
-
-        return true;
-    }
-
-    /**
-     * End the session and distill memory.
-     * This is where learning happens.
-     */
-    async completeSession(sessionId, finalSnapshot) {
-        const session = this.memory.sessionContext.getSession(sessionId);
-        if (!session) return;
-
-        const sessionSnapshot = {
-            ...session,
-            ...finalSnapshot
-        };
-
-        // Distill into memory
-        await this.memory.processCompletedSession(sessionSnapshot);
-
-        // End session
-        this.memory.sessionContext.endSession(sessionId);
-
-        return { status: "completed", learned: true };
+        return summary;
     }
 }
+
+module.exports = IAIEngine;
