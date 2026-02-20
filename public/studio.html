@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAI Creative Studio</title>
+    <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+    <div id="studio-shell">
+        <header>
+            <h1>IAI CREATIVE STUDIO</h1>
+            <p>Music → Video → Art</p>
+        </header>
+
+        <main>
+            <section id="prompt-section">
+                <textarea id="studio-prompt" placeholder="Describe the vibe, scene, or emotion..."></textarea>
+                <button id="run-pipeline-btn">GENERATE</button>
+            </section>
+
+            <section id="pipeline-status">
+                <div class="stage" id="stage-music">
+                    <h3>Music</h3>
+                    <div class="stage-output">Waiting...</div>
+                </div>
+
+                <div class="stage" id="stage-video">
+                    <h3>Video</h3>
+                    <div class="stage-output">Waiting...</div>
+                </div>
+
+                <div class="stage" id="stage-art">
+                    <h3>Art</h3>
+                    <div class="stage-output">Waiting...</div>
+                </div>
+            </section>
+
+            <section id="final-output">
+                <h2>FINAL CREATIVE OUTPUT</h2>
+                <div id="studio-result">No output yet.</div>
+            </section>
+        </main>
+    </div>
+
+    <script src="studio.js"></script>
+</body>
+</html>
