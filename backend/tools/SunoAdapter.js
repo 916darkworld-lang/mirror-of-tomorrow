@@ -1,10 +1,10 @@
 class SunoAdapter {
     constructor() {}
 
-    async generateMusic(prompt) {
+    async generate({ prompt }) {
         return {
             success: true,
-            result: `Music generated from prompt: "${prompt}"`
+            result: `Simulated Suno music track for: "${prompt}"`
         };
     }
 }
