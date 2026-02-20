@@ -9,6 +9,9 @@ const port = 3000;
 
 app.use(express.json());
 
+// ⭐ Serve frontend UI
+app.use(express.static('public'));
+
 const userDataPath = path.join(__dirname, 'data');
 const memory = new MemoryManager(userDataPath);
 const iai = new IAIEngine({ userDataPath, mode: 'hybrid' });
