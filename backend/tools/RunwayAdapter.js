@@ -1,10 +1,10 @@
 class RunwayAdapter {
     constructor() {}
 
-    async generateVideo(prompt) {
+    async generate({ prompt, musicTrack }) {
         return {
             success: true,
-            result: `Video generated from prompt: "${prompt}"`
+            result: `Simulated Runway video generated from prompt: "${prompt}" using music: "${musicTrack}"`
         };
     }
 }
