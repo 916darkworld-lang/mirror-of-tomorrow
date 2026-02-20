@@ -1,10 +1,10 @@
 class ArtAdapter {
     constructor() {}
 
-    async generateArt(prompt) {
+    async generate({ prompt, videoPreview }) {
         return {
             success: true,
-            result: `Art generated from prompt: "${prompt}"`
+            result: `Simulated art generated from prompt: "${prompt}" using video preview: "${videoPreview}"`
         };
     }
 }
