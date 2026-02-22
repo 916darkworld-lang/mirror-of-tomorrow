@@ -3,61 +3,68 @@
 /**
  * AnimationController
  *
- * Centralized controller for enabling/disabling animations
- * and applying animation classes in a consistent way.
+ * Centralized controller for triggering CSS‑based animations.
+ * Keeps animation logic consistent and prevents scattered class toggles.
  *
- * This keeps animation logic out of components and prevents
- * scattered CSS‑class manipulation.
+ * Responsibilities:
+ *  - play one‑shot animations on any element
+ *  - apply/remove animation classes cleanly
+ *  - provide a unified API for future animation packs
  */
 
 class AnimationController {
   constructor(config = {}) {
     /**
      * config = {
-     *   rootSelector: "#app",
-     *   enabled: true
+     *   defaultClass: "animate",
+     *   duration: 300 // ms
      * }
      */
 
-    this.rootEl = document.querySelector(config.rootSelector);
-    this.enabled = config.enabled !== false;
+    this.defaultClass = config.defaultClass || "animate";
+    this.duration = config.duration || 300;
+  }
 
-    if (!this.rootEl) {
-      console.error("AnimationController: root element not found:", config.rootSelector);
+  /**
+   * Play a one‑shot animation on an element.
+   * Automatically removes the class after the duration.
+   */
+  play(selector, animationClass = this.defaultClass) {
+    const el = document.querySelector(selector);
+    if (!el) {
+      console.error("AnimationController: element not found:", selector);
+      return;
     }
 
-    this.apply();
+    el.classList.add(animationClass);
+
+    setTimeout(() => {
+      el.classList.remove(animationClass);
+    }, this.duration);
   }
 
-  enable() {
-    this.enabled = true;
-    this.apply();
-  }
-
-  disable() {
-    this.enabled = false;
-    this.apply();
-  }
-
-  toggle() {
-    this.enabled = !this.enabled;
-    this.apply();
-  }
-
-  apply() {
-    if (!this.rootEl) return;
-
-    if (this.enabled) {
-      this.rootEl.classList.add("animations-on");
-      this.rootEl.classList.remove("animations-off");
-    } else {
-      this.rootEl.classList.add("animations-off");
-      this.rootEl.classList.remove("animations-on");
+  /**
+   * Add an animation class without auto‑removal.
+   */
+  add(selector, animationClass = this.defaultClass) {
+    const el = document.querySelector(selector);
+    if (!el) {
+      console.error("AnimationController: element not found:", selector);
+      return;
     }
+    el.classList.add(animationClass);
   }
 
-  isEnabled() {
-    return this.enabled;
+  /**
+   * Remove an animation class.
+   */
+  remove(selector, animationClass = this.defaultClass) {
+    const el = document.querySelector(selector);
+    if (!el) {
+      console.error("AnimationController: element not found:", selector);
+      return;
+    }
+    el.classList.remove(animationClass);
   }
 }
 
