@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld('controlBridge', {
   },
 
   onPartialResponse: (callback) => {
-    ipcRenderer.on('partial-response', (event, payload) => {
+    ipcRenderer.on('ai-response', (event, payload) => {
       callback(payload);
     });
   },
