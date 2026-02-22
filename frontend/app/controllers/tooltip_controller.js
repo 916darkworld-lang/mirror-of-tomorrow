@@ -1,77 +1,31 @@
-// frontend/app/controllers/tooltip_controller.js
+import { Controller } from "@hotwired/stimulus"
 
-/**
- * TooltipController
- *
- * Centralized controller for lightweight tooltips.
- * Keeps hover/focus tooltip behavior consistent across the app.
- *
- * Responsibilities:
- *  - show/hide tooltips
- *  - position tooltips relative to target elements
- *  - optional animation classes
- */
+export default class extends Controller {
+  static targets = ["trigger", "tooltip"]
 
-class TooltipController {
-  constructor(config = {}) {
-    /**
-     * config = {
-     *   tooltipSelector: "#tooltip",
-     *   animationClass: "tooltip-animate",
-     *   offsetX: 10,
-     *   offsetY: 10
-     * }
-     */
-
-    this.tooltipEl = document.querySelector(config.tooltipSelector);
-    this.animationClass = config.animationClass || "tooltip-animate";
-
-    this.offsetX = config.offsetX || 10;
-    this.offsetY = config.offsetY || 10;
-
-    if (!this.tooltipEl) {
-      console.error("TooltipController: tooltip element not found:", config.tooltipSelector);
-    }
-
-    this.currentTarget = null;
+  connect() {
+    this.hideAll()
   }
 
-  show(target, text) {
-    if (!this.tooltipEl) return;
+  show(event) {
+    const trigger = event.currentTarget
+    const tooltip = trigger.nextElementSibling
 
-    this.currentTarget = target;
-    this.tooltipEl.textContent = text;
+    if (!tooltip) return
 
-    const rect = target.getBoundingClientRect();
+    this.hideAll()
+    tooltip.classList.add("visible")
 
-    this.tooltipEl.style.left = rect.left + this.offsetX + "px";
-    this.tooltipEl.style.top = rect.top + this.offsetY + "px";
-
-    this.tooltipEl.style.display = "block";
-    this.tooltipEl.classList.add(this.animationClass);
+    const rect = trigger.getBoundingClientRect()
+    tooltip.style.top = `${rect.bottom + window.scrollY + 6}px`
+    tooltip.style.left = `${rect.left + window.scrollX}px`
   }
 
   hide() {
-    if (!this.tooltipEl) return;
-
-    this.tooltipEl.classList.remove(this.animationClass);
-    this.tooltipEl.style.display = "none";
-
-    this.currentTarget = null;
+    this.hideAll()
   }
 
-  attach(selector, text) {
-    const el = document.querySelector(selector);
-    if (!el) {
-      console.error("TooltipController: attach target not found:", selector);
-      return;
-    }
-
-    el.addEventListener("mouseenter", () => this.show(el, text));
-    el.addEventListener("mouseleave", () => this.hide());
-    el.addEventListener("focus", () => this.show(el, text));
-    el.addEventListener("blur", () => this.hide());
+  hideAll() {
+    this.tooltipTargets.forEach(t => t.classList.remove("visible"))
   }
 }
-
-export default TooltipController;
