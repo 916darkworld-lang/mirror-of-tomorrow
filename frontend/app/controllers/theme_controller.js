@@ -3,33 +3,93 @@
 /**
  * ThemeController
  *
- * Thin controller that wraps ThemeState.
- * This exists so future theme logic (animations, transitions,
- * user presets, saved preferences, etc.) has a clean home.
+ * Centralized controller for applying and switching UI themes.
+ * Keeps theme logic consistent and prevents scattered class toggles.
+ *
+ * Responsibilities:
+ *  - apply light/dark/system themes
+ *  - persist theme choice (optional)
+ *  - expose clean API for future theme packs
  */
 
-import appState from "../state/app_state";
-
 class ThemeController {
-  constructor() {
-    // No DOM wiring here — logic only.
+  constructor(config = {}) {
+    /**
+     * config = {
+     *   rootSelector: "#app",
+     *   storageKey: "theme",
+     *   default: "dark", // "light" | "dark" | "system"
+     *   persist: true
+     * }
+     */
+
+    this.rootEl = document.querySelector(config.rootSelector);
+    this.storageKey = config.storageKey || "theme";
+    this.persist = config.persist !== false;
+
+    this.theme = this.persist
+      ? this._load() || config.default || "dark"
+      : config.default || "dark";
+
+    if (!this.rootEl) {
+      console.error("ThemeController: root element not found:", config.rootSelector);
+    }
+
+    this.apply(this.theme);
   }
 
-  toggle() {
-    appState.theme.toggle();
+  // ----- Persistence -----
+  _load() {
+    try {
+      return localStorage.getItem(this.storageKey);
+    } catch (err) {
+      console.error("ThemeController: failed to load theme", err);
+      return null;
+    }
   }
 
-  set(mode) {
-    if (mode !== "light" && mode !== "dark") return;
-    appState.theme.set(mode);
+  _save(theme) {
+    if (!this.persist) return;
+    try {
+      localStorage.setItem(this.storageKey, theme);
+    } catch (err) {
+      console.error("ThemeController: failed to save theme", err);
+    }
+  }
+
+  // ----- Theme Application -----
+  apply(theme) {
+    if (!this.rootEl) return;
+
+    this.theme = theme;
+
+    this.rootEl.classList.remove("theme-light", "theme-dark", "theme-system");
+
+    if (theme === "light") {
+      this.rootEl.classList.add("theme-light");
+    } else if (theme === "dark") {
+      this.rootEl.classList.add("theme-dark");
+    } else if (theme === "system") {
+      this.rootEl.classList.add("theme-system");
+    }
+
+    this._save(theme);
+  }
+
+  set(theme) {
+    this.apply(theme);
   }
 
   get() {
-    return appState.theme.get();
+    return this.theme;
   }
 
-  subscribe(fn) {
-    appState.theme.subscribe(fn);
+  toggle() {
+    if (this.theme === "light") {
+      this.apply("dark");
+    } else {
+      this.apply("light");
+    }
   }
 }
 
