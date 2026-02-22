@@ -3,14 +3,13 @@
 /**
  * PanelController
  *
- * Centralized controller for showing/hiding UI panels with optional
- * animation classes. This keeps panel logic consistent and prevents
- * duplication across the app.
+ * Centralized controller for expanding/collapsing UI panels.
+ * Prevents scattered DOM toggles and keeps panel behavior consistent.
  *
  * Responsibilities:
  *  - open/close/toggle panels
- *  - apply animation classes
- *  - track active panel
+ *  - apply active/inactive classes
+ *  - optional animation hooks
  */
 
 class PanelController {
@@ -22,14 +21,14 @@ class PanelController {
      *     right: "#rightPanel",
      *     bottom: "#bottomPanel"
      *   },
-     *   animationClass: "panel-animate"
+     *   openClass: "panel-open",
+     *   closedClass: "panel-closed"
      * }
      */
 
     this.panels = {};
-    this.active = null;
-
-    this.animationClass = config.animationClass || "panel-animate";
+    this.openClass = config.openClass || "panel-open";
+    this.closedClass = config.closedClass || "panel-closed";
 
     for (const key in config.panels) {
       const selector = config.panels[key];
@@ -50,26 +49,23 @@ class PanelController {
       return;
     }
 
-    panel.style.display = "block";
-    panel.classList.add(this.animationClass);
-
-    this.active = name;
+    panel.classList.add(this.openClass);
+    panel.classList.remove(this.closedClass);
   }
 
   close(name) {
     const panel = this.panels[name];
     if (!panel) return;
 
-    panel.classList.remove(this.animationClass);
-    panel.style.display = "none";
-
-    if (this.active === name) {
-      this.active = null;
-    }
+    panel.classList.remove(this.openClass);
+    panel.classList.add(this.closedClass);
   }
 
   toggle(name) {
-    if (this.active === name) {
+    const panel = this.panels[name];
+    if (!panel) return;
+
+    if (panel.classList.contains(this.openClass)) {
       this.close(name);
     } else {
       this.open(name);
@@ -80,11 +76,12 @@ class PanelController {
     for (const key in this.panels) {
       this.close(key);
     }
-    this.active = null;
   }
 
-  getActive() {
-    return this.active;
+  openAll() {
+    for (const key in this.panels) {
+      this.open(key);
+    }
   }
 }
 
