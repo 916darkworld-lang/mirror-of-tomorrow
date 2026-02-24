@@ -1,27 +1,33 @@
-class Consensus {
-    compute({ grokResponse, claudeResponse, copilotResponse }) {
-        const responses = [
+import Consensus from "./consensus.js";
+
+class Orchestrator {
+    async processPrompt({ grokResponse, claudeResponse, copilotResponse }) {
+        // Run deterministic consensus
+        const final = Consensus.compute({
             grokResponse,
             claudeResponse,
             copilotResponse
-        ].filter(r => typeof r === "string" && r.length > 0);
+        });
 
-        if (responses.length === 0) {
-            return "";
-        }
+        // Basic summary for the user-facing prompt box
+        const summary = `Summary:\n\nGrok: ${grokResponse}\n\nClaude: ${claudeResponse}\n\nCopilot: ${copilotResponse}\n\nConsensus: ${final}`;
 
-        // Deterministic consensus:
-        // Choose the response with the most characters.
-        let longest = responses[0];
+        // Loop state for the next round of AI-to-AI swaps
+        const loopState = {
+            nextForGrok: claudeResponse,
+            nextForClaude: copilotResponse,
+            nextForCopilot: grokResponse
+        };
 
-        for (let i = 1; i < responses.length; i++) {
-            if (responses[i].length > longest.length) {
-                longest = responses[i];
-            }
-        }
-
-        return longest;
+        return {
+            grokResponse,
+            claudeResponse,
+            copilotResponse,
+            final,
+            summary,
+            loopState
+        };
     }
 }
 
-export default new Consensus();
+export default new Orchestrator();
