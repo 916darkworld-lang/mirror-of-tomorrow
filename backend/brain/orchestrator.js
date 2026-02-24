@@ -1,23 +1,27 @@
-import AI1 from "./models/ai1.js";
-import AI2 from "./models/ai2.js";
-import AI3 from "./models/ai3.js";
-import Consensus from "./consensus.js";
+class Consensus {
+    compute({ grokResponse, claudeResponse, copilotResponse }) {
+        const responses = [
+            grokResponse,
+            claudeResponse,
+            copilotResponse
+        ].filter(r => typeof r === "string" && r.length > 0);
 
-class Orchestrator {
-    async processPrompt(prompt) {
-        const responses = await Promise.all([
-            AI1.ask(prompt),
-            AI2.ask(prompt),
-            AI3.ask(prompt)
-        ]);
+        if (responses.length === 0) {
+            return "";
+        }
 
-        const final = Consensus.compute(responses);
+        // Deterministic consensus:
+        // Choose the response with the most characters.
+        let longest = responses[0];
 
-        return {
-            responses,
-            final
-        };
+        for (let i = 1; i < responses.length; i++) {
+            if (responses[i].length > longest.length) {
+                longest = responses[i];
+            }
+        }
+
+        return longest;
     }
 }
 
-export default new Orchestrator();
+export default new Consensus();
