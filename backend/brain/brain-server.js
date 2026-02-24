@@ -13,8 +13,13 @@ wss.on("connection", (ws) => {
     ws.on("message", async (msg) => {
         const data = JSON.parse(msg);
 
-        if (data.type === "userPrompt") {
-            const result = await Orchestrator.processPrompt(data.prompt);
+        // Frontend sends REAL AI window outputs
+        if (data.type === "aiResponses") {
+            const result = await Orchestrator.processPrompt({
+                grokResponse: data.grok,
+                claudeResponse: data.claude,
+                copilotResponse: data.copilot
+            });
 
             ws.send(JSON.stringify({
                 type: "brainResponse",
