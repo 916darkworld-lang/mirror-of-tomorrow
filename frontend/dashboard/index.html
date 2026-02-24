@@ -1,51 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mirror of Tomorrow</title>
+/**
+ * Dashboard Controller
+ * --------------------
+ * Connects the dashboard UI to the IAI engine.
+ */
 
-    <!-- Futuristic Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+import bridge from "../bridge/bridge-connection.js";
 
-    <link rel="stylesheet" href="styles.css" />
-</head>
+class DashboardController {
+    constructor() {
+        this.statusEl = null;
+        this.runBtn = null;
+        this.inputEl = null;
+        this.outputEl = null;
+    }
 
-<body>
+    init() {
+        this.statusEl = document.getElementById("engine-status");
+        this.runBtn = document.getElementById("run-btn");
+        this.inputEl = document.getElementById("dashboard-input");
+        this.outputEl = document.getElementById("dashboard-output");
 
-    <!-- Animated Noir Background -->
-    <div class="background"></div>
+        // Connect to bridge
+        bridge.connect();
 
-    <!-- Holographic Header -->
-    <header class="header">
-        <h1 class="title">MIRROR OF TOMORROW</h1>
-        <p class="subtitle">Future-State Intelligence Chamber</p>
-    </header>
+        // Listen for brain readiness
+        bridge.on("brainReady", () => {
+            this.updateStatus("🟢 Engine Ready");
+        });
 
-    <!-- Main Layout -->
-    <div class="container">
+        // Listen for responses
+        bridge.on("brainResponse", (result) => {
+            this.outputEl.innerText = result.final;
+        });
 
-        <!-- Input Panel -->
-        <section class="panel input-panel glass">
-            <h2>Input Stream</h2>
-            <textarea id="userInput" placeholder="Type your thoughts, intentions, or state of mind..."></textarea>
-            <button id="analyzeBtn" class="holo-btn">Analyze Future State</button>
-        </section>
+        // Wire run button
+        this.runBtn.addEventListener("click", () => {
+            const prompt = this.inputEl.value.trim();
+            if (!prompt) return;
 
-        <!-- Future-State Hologram -->
-        <section class="panel hologram-panel glass">
-            <h2>Future-State Projection</h2>
-            <div id="futureSummary" class="holo-output"></div>
-        </section>
+            bridge.sendPrompt(prompt);
+            this.updateStatus("⚡ Processing...");
+        });
+    }
 
-        <!-- Insights Panel -->
-        <section class="panel insights-panel glass">
-            <h2>Insights & Signals</h2>
-            <ul id="insightsList"></ul>
-        </section>
+    updateStatus(text) {
+        if (this.statusEl) this.statusEl.innerText = text;
+    }
+}
 
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+export default new DashboardController();
