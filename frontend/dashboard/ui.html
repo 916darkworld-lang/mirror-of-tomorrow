@@ -1,0 +1,60 @@
+<!-- Dashboard UI Structure -->
+<div id="dashboard-container">
+
+    <!-- Engine Status -->
+    <div id="engine-status" style="
+        padding: 10px;
+        background: #222;
+        border-bottom: 1px solid #333;
+        font-size: 18px;
+    ">
+        🔄 Engine Initializing…
+    </div>
+
+    <!-- Input Area -->
+    <div style="
+        padding: 15px;
+        background: #111;
+        border-bottom: 1px solid #333;
+        display: flex;
+        gap: 10px;
+    ">
+        <input
+            id="dashboard-input"
+            placeholder="Enter prompt…"
+            style="
+                flex: 1;
+                padding: 10px;
+                font-size: 16px;
+                background: #000;
+                color: #fff;
+                border: 1px solid #444;
+            "
+        />
+
+        <button
+            id="run-btn"
+            style="
+                padding: 10px 20px;
+                background: #444;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            "
+        >
+            Run
+        </button>
+    </div>
+
+    <!-- Output Area -->
+    <div id="dashboard-output" style="
+        padding: 20px;
+        background: #181818;
+        height: 50vh;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        border-top: 1px solid #333;
+    ">
+    </div>
+
+</div>
