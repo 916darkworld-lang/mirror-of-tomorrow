@@ -1,11 +1,15 @@
 class Consensus {
-    compute(responses) {
-        if (!Array.isArray(responses) || responses.length === 0) {
+    compute({ grokResponse, claudeResponse, copilotResponse }) {
+        const responses = [
+            grokResponse,
+            claudeResponse,
+            copilotResponse
+        ].filter(r => typeof r === "string" && r.length > 0);
+
+        if (responses.length === 0) {
             return "";
         }
 
-        // Basic deterministic consensus:
-        // Choose the response with the most characters.
         let longest = responses[0];
 
         for (let i = 1; i < responses.length; i++) {
