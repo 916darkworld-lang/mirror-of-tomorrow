@@ -9,10 +9,15 @@ class Orchestrator {
             copilotResponse
         });
 
-        // Basic summary for the user-facing prompt box
-        const summary = `Summary:\n\nGrok: ${grokResponse}\n\nClaude: ${claudeResponse}\n\nCopilot: ${copilotResponse}\n\nConsensus: ${final}`;
+        // Summary for user-facing prompt box
+        const summary =
+            `Summary:\n\n` +
+            `Grok: ${grokResponse}\n\n` +
+            `Claude: ${claudeResponse}\n\n` +
+            `Copilot: ${copilotResponse}\n\n` +
+            `Consensus: ${final}`;
 
-        // Loop state for the next round of AI-to-AI swaps
+        // Loop state for next round of AI-to-AI swaps
         const loopState = {
             nextForGrok: claudeResponse,
             nextForClaude: copilotResponse,
