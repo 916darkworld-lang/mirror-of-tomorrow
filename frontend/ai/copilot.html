@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Copilot AI Window</title>
+  <script>
+    window.addEventListener("message", async (event) => {
+      const data = event.data;
+
+      if (data.type === "prompt") {
+        const prompt = data.prompt;
+
+        // TODO: Replace with real Copilot API call
+        const copilotResponse = "Copilot response to: " + prompt;
+
+        window.opener.postMessage(
+          {
+            type: "copilotResponse",
+            copilotResponse
+          },
+          "*"
+        );
+      }
+    });
+  </script>
+</head>
+<body>
+  <h3>Copilot AI Window</h3>
+</body>
+</html>
