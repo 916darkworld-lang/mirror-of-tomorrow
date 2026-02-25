@@ -62,21 +62,43 @@ class AppController {
     });
   }
 
-  handleSend(prompt) {
+  async handleSend(prompt) {
     if (!prompt) return;
 
     appState.loading.start();
     appState.output.clear();
     appState.error.clear();
 
-    // In your real system, this is where you'd orchestrate AI calls.
-    // For now, we simulate output.
-    setTimeout(() => {
-      const fakeOutput = `AI Response to: ${prompt}`;
-      appState.output.set(fakeOutput);
-      appState.history.add(prompt, fakeOutput);
+    try {
+      // Save prompt into state
+      appState.prompt.set(prompt);
+
+      // Call your IAI backend
+      const response = await fetch("/api/iai/respond", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`IAI backend error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Expecting something like: { output: "text", meta: {...} }
+      const aiOutput = data.output || "No response from IAI engine.";
+
+      appState.output.set(aiOutput);
+      appState.history.add(prompt, aiOutput);
+    } catch (err) {
+      console.error("IAI handleSend error:", err);
+      appState.error.set("There was a problem talking to the IAI engine.");
+    } finally {
       appState.loading.stop();
-    }, 300);
+    }
   }
 
   handleNext() {
