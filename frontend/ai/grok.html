@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Grok AI Window</title>
+  <script>
+    window.addEventListener("message", async (event) => {
+      const data = event.data;
+
+      if (data.type === "prompt") {
+        const prompt = data.prompt;
+
+        // TODO: Replace with real Grok API call
+        const grokResponse = "Grok response to: " + prompt;
+
+        window.opener.postMessage(
+          {
+            type: "grokResponse",
+            grokResponse
+          },
+          "*"
+        );
+      }
+    });
+  </script>
+</head>
+<body>
+  <h3>Grok AI Window</h3>
+</body>
+</html>
