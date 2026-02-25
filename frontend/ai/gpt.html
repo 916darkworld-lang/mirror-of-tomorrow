@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>GPT AI Window</title>
+  <script>
+    window.addEventListener("message", async (event) => {
+      const data = event.data;
+
+      if (data.type === "prompt") {
+        const prompt = data.prompt;
+
+        // TODO: Replace with real GPT API call
+        const gptResponse = "GPT response to: " + prompt;
+
+        window.opener.postMessage(
+          {
+            type: "gptResponse",
+            gptResponse
+          },
+          "*"
+        );
+      }
+    });
+  </script>
+</head>
+<body>
+  <h3>GPT AI Window</h3>
+</body>
+</html>
