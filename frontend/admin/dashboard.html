@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .section {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.6);
+    }
+
+    button {
+      padding: 10px 15px;
+      background: #4a8cff;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #3a74d6;
+    }
+
+    select {
+      padding: 10px;
+      background: #333;
+      color: #eee;
+      border: none;
+      border-radius: 4px;
+      margin-top: 10px;
+      width: 200px;
+    }
+  </style>
+
+  <script>
+    function checkAdminAuth() {
+      const token = localStorage.getItem("admin_token");
+      if (!token) {
+        window.location.href = "/admin/admin_login.html";
+      }
+    }
+
+    async function updateTier() {
+      const tier = document.getElementById("tierSelect").value;
+
+      await fetch("/admin/set-tier", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier })
+      });
+
+      alert("Subscription tier updated.");
+    }
+
+    async function toggleGitHubAddOn() {
+      await fetch("/admin/toggle-github-addon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      alert("GitHub add-on toggled.");
+    }
+
+    window.onload = checkAdminAuth;
+  </script>
+</head>
+
+<body>
+  <h1>Admin Dashboard</h1>
+
+  <div class="section">
+    <h2>Subscription Tier</h2>
+    <select id="tierSelect">
+      <option value="free">Free (Demo)</option>
+      <option value="basic">Basic (Paid Tier 1)</option>
+      <option value="premium">Premium (Top Tier)</option>
+    </select>
+    <br />
+    <button onclick="updateTier()">Update Tier</button>
+  </div>
+
+  <div class="section">
+    <h2>GitHub Deployment Add-On</h2>
+    <button onclick="toggleGitHubAddOn()">Toggle GitHub Add-On</button>
+  </div>
+
+</body>
+</html>
