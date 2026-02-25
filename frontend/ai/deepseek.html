@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>DeepSeek AI Window</title>
+  <script>
+    window.addEventListener("message", async (event) => {
+      const data = event.data;
+
+      if (data.type === "prompt") {
+        const prompt = data.prompt;
+
+        // TODO: Replace with real DeepSeek API call
+        const deepseekResponse = "DeepSeek response to: " + prompt;
+
+        window.opener.postMessage(
+          {
+            type: "deepseekResponse",
+            deepseekResponse
+          },
+          "*"
+        );
+      }
+    });
+  </script>
+</head>
+<body>
+  <h3>DeepSeek AI Window</h3>
+</body>
+</html>
